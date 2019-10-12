@@ -25,6 +25,9 @@ public class LoginController extends HttpServlet {
             case "login":
                 login(req, resp);
                 break;
+            case "register":
+//                tu dodać kod rejestracji itd
+                break;
             case "logout":
             default:
                 req.getSession().invalidate();

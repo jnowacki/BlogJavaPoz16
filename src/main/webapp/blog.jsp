@@ -46,7 +46,7 @@
                 </form>
             </c:when>
 
-            <c:otherwise>
+            <c:when test="${sessionScope.username == null && param.register == null}">
                 <form method="post" action="${pageContext.request.contextPath}/login" class="form-inline">
                     <div class="form-group mb-2">
                         <label for="email" class="sr-only">Email</label>
@@ -58,6 +58,22 @@
                     </div>
                     <input type="hidden" name="action" value="login">
                     <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
+                </form>
+                <a href="${pageContext.request.contextPath}?register=true">Register</a>
+            </c:when>
+
+            <c:otherwise>
+                <form method="post" action="${pageContext.request.contextPath}/login" class="form-inline">
+                    <div class="form-group mb-2">
+                        <label for="emailReg" class="sr-only">Email</label>
+                        <input type="text" class="form-control" id="emailReg" name="email" placeholder="email@example.com">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="pwdReg" class="sr-only">Password</label>
+                        <input type="password" class="form-control" id="pwdReg" name="password" placeholder="Password">
+                    </div>
+                    <input type="hidden" name="action" value="register">
+                    <button type="submit" class="btn btn-primary mb-2">Register</button>
                 </form>
             </c:otherwise>
         </c:choose>
