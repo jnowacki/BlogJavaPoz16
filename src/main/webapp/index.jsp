@@ -40,7 +40,7 @@
         <form class="form-inline">
             <div class="form-group mb-2">
                 <label for="email" class="sr-only">Email</label>
-                <input type="text" class="form-control" id="email" name="email" value="email@example.com">
+                <input type="text" class="form-control" id="email" name="email" placeholder="email@example.com">
             </div>
             <div class="form-group mx-sm-3 mb-2">
                 <label for="pwd" class="sr-only">Password</label>
