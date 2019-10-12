@@ -44,7 +44,7 @@ public class LoginController extends HttpServlet {
             resp.sendRedirect(getServletContext().getContextPath() + "/");
         } else {
             req.setAttribute("error", true);
-            resp.sendRedirect(getServletContext().getContextPath() + "/");
+            getServletContext().getRequestDispatcher("/blog.jsp").forward(req, resp);
         }
     }
 }

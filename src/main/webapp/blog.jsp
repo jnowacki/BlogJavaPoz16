@@ -37,18 +37,30 @@
 <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
 
-        <form method="post" action="${pageContext.request.contextPath}/login" class="form-inline">
-            <div class="form-group mb-2">
-                <label for="email" class="sr-only">Email</label>
-                <input type="text" class="form-control" id="email" name="email" placeholder="email@example.com">
-            </div>
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="pwd" class="sr-only">Password</label>
-                <input type="password" class="form-control" id="pwd" name="password" placeholder="Password">
-            </div>
-            <input type="hidden" name="action" value="login">
-            <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
-        </form>
+        <c:choose>
+            <c:when test="${sessionScope.username != null}">
+                <h5 class="text-white"><c:out value="Hello ${sessionScope.username}"/></h5>
+                <form method="post" action="${pageContext.request.contextPath}/login" class="form-inline">
+                    <input type="hidden" name="action" value="logout">
+                    <button type="submit" class="btn btn-primary mb-2">Logout</button>
+                </form>
+            </c:when>
+
+            <c:otherwise>
+                <form method="post" action="${pageContext.request.contextPath}/login" class="form-inline">
+                    <div class="form-group mb-2">
+                        <label for="email" class="sr-only">Email</label>
+                        <input type="text" class="form-control ${requestScope.error ? 'is-invalid' : ''}" id="email" name="email" placeholder="email@example.com">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <label for="pwd" class="sr-only">Password</label>
+                        <input type="password" class="form-control ${requestScope.error ? 'is-invalid' : ''}" id="pwd" name="password" placeholder="Password">
+                    </div>
+                    <input type="hidden" name="action" value="login">
+                    <button type="submit" class="btn btn-primary mb-2">Confirm identity</button>
+                </form>
+            </c:otherwise>
+        </c:choose>
 
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
                 data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
