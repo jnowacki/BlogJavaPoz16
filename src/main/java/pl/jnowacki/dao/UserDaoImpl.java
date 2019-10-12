@@ -1,25 +1,33 @@
 package pl.jnowacki.dao;
 
 import pl.jnowacki.model.User;
-import pl.jnowacki.util.DbConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+import java.sql.*;
 
 public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUser(String userLogin) {
 
-        String selectSQL = "SELECT * FROM users WHERE login = ?";
+        Context ctx = null;
+        Connection con = null;
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
 
-        try (Connection dbConnection = DbConnection.getDBConnection();
-             PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL)) {
+        try {
+            ctx = new InitialContext();
+            DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/MyBlogDB");
 
-            preparedStatement.setString(1, userLogin);
-            ResultSet rs = preparedStatement.executeQuery();
+            con = ds.getConnection();
+
+            stmt = con.prepareStatement("SELECT * FROM users WHERE login = ?");
+            stmt.setString(1, userLogin);
+
+            rs = stmt.executeQuery();
 
             if (rs.next()) {
                 Long id = rs.getLong("id");
@@ -29,10 +37,28 @@ public class UserDaoImpl implements UserDao {
                 return new User(id, userName, password);
             }
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+        } catch (NamingException | SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+                if (ctx != null) {
+                    ctx.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Exception in closing DB resources");
+            } catch (NamingException e) {
+                System.out.println("Exception in closing Context");
+            }
         }
-
         return null;
     }
 }
