@@ -9,7 +9,7 @@ CREATE TABLE `users` (
 );
 
 insert into `users` (`login`, `password`) values
-('user1', '$12$hYJ5G90y1EABpyQOnS16yuocDxQLZb6u1YUM/WKhCXrP.hQpxZSTy'),
-('user2', '$12$e.pVlxZjWfdhTOJbMWKEle1F.blkudK/G3rYH24u2ttYyTW2NwsP2');
+('user1', '$2a$12$hYJ5G90y1EABpyQOnS16yuocDxQLZb6u1YUM/WKhCXrP.hQpxZSTy'),
+('user2', '$2a$12$e.pVlxZjWfdhTOJbMWKEle1F.blkudK/G3rYH24u2ttYyTW2NwsP2');
 
 select * from users;
