@@ -17,6 +17,23 @@ public class LoginController extends HttpServlet {
     private UserService userService = new UserServiceImpl();
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String token = req.getParameter("token");
+
+        boolean isActivated = false;
+
+        if(StringUtils.isNotEmpty(token)) {
+            isActivated = userService.activateUser(token);
+        }
+
+        if(isActivated) {
+            resp.getWriter().println("Aktywowano twojego uzytkownika!");
+        } else {
+            resp.getWriter().println("Cos poszlo nie tak :(");
+        }
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         String action = req.getParameter("action");
@@ -26,7 +43,7 @@ public class LoginController extends HttpServlet {
                 login(req, resp);
                 break;
             case "register":
-//                tu dodać kod rejestracji itd
+                register(req, resp);
                 break;
             case "logout":
             default:
@@ -46,8 +63,21 @@ public class LoginController extends HttpServlet {
             req.getSession().setAttribute("username", userName);
             resp.sendRedirect(getServletContext().getContextPath() + "/");
         } else {
-            req.setAttribute("error", true);
-            getServletContext().getRequestDispatcher("/blog.jsp").forward(req, resp);
+            resp.sendRedirect(req.getContextPath() + "/?error=true");
+        }
+    }
+
+    private void register(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String userName = req.getParameter("email");
+        String password = req.getParameter("password");
+
+        if (StringUtils.isNotEmpty(userName.trim()) &&
+                StringUtils.isNotEmpty(password.trim())) {
+
+            userService.registerUser(userName, password, req.getContextPath());
+            resp.sendRedirect(getServletContext().getContextPath() + "/");
+        } else {
+            resp.sendRedirect(req.getContextPath() + "/?error=true");
         }
     }
 }

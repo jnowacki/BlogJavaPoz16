@@ -409,3 +409,26 @@ footer .copyright {
   font-size: 16px;
   padding: 25px 35px;
 }
+
+.flex-container {
+  display: flex;
+}
+
+.flex-container > *:not(:last-child) {
+  display: flex;
+
+  margin-right: 10px;
+}
+
+.flex-container--column {
+  flex-direction: column;
+}
+
+.flex-justify--end {
+  justify-content: flex-end;
+}
+
+.l-login-form .login-form__item {
+  flex: 1 1 auto;
+}
+
